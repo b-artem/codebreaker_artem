@@ -6,12 +6,13 @@ require "codebreaker_artem/version"
 Gem::Specification.new do |spec|
   spec.name          = "codebreaker_artem"
   spec.version       = CodebreakerArtem::VERSION
+  spec.licenses      = ['MIT']
   spec.authors       = ["b-artem"]
   spec.email         = ["ba.artyom@gmail.com"]
 
   spec.summary       = %q{Codebreaker game.}
-  spec.description   = %q{Codebreaker is a logic game in which a code-breaker" \
-      " tries to break a secret code created by a code-maker.}
+  spec.description   = %q{Codebreaker is a logic game in which a code-breaker
+      tries to break a secret code created by a code-maker.}
   spec.homepage      = "https://github.com/b-artem/codebreaker_artem"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
