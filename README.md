@@ -22,6 +22,8 @@ Or install it yourself as:
 
 ### To play a game type the following:
 ```ruby
+require 'codebreaker_artem'
+
 game = CodebreakerArtem::Game.new
 game.play
 ```

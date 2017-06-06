@@ -12,7 +12,9 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Codebreaker game.}
   spec.description   = %q{Codebreaker is a logic game in which a code-breaker
-      tries to break a secret code created by a code-maker.}
+      tries to break a secret code created by a code-maker. The code-maker,
+      which will be played by the application, creates a secret code of four
+      numbers between 1 and 6.}
   spec.homepage      = "https://github.com/b-artem/codebreaker_artem"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
