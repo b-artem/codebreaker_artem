@@ -20,6 +20,12 @@ Or install it yourself as:
 
 ## Usage
 
+### To play a game type the following:
+```ruby
+game = Game.new
+game.play
+```
+
 The code-maker, which will be played by the application, creates a secret code of four numbers between 1 and 6.
 
 The code-breaker then gets some number of chances to break the code. In each turn, the code-breaker makes a guess of four numbers. The code-maker then marks the guess with up to four + and - signs.
