@@ -3,6 +3,17 @@ require 'spec_helper'
 RSpec.describe CodebreakerArtem::Game do
   let(:game) { CodebreakerArtem::Game.new }
 
+  describe '#play' do
+    it 'calls #start' do
+      # expect(game).to receive(:start)
+      # allow(game).to receive(:start).and_return(return)
+      # game.play
+    end
+    it 'calls #guess_input'
+    it 'calls #submit_guess'
+    it 'calls #mark_guess'
+  end
+
   describe '#start' do
     context 'when sets initial values' do
       it 'sets @guess_count = 0' do
@@ -35,8 +46,9 @@ RSpec.describe CodebreakerArtem::Game do
       end
     end
 
-    it 'prints welcome message' do
-      expect { game.send(:start) }.to output(/Welcome/).to_stdout
+    it 'calls #welcome_msg' do
+      expect(game).to receive(:welcome_msg)
+      game.send(:start)
     end
   end
 
