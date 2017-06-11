@@ -11,7 +11,7 @@ module GameUtils
       "Type 'exit' to exit the game\n\n"
   end
 
-  def guess_input
+  def guess_prompt
     print "Please enter your guess no. #{@guess_count}: "
   end
 

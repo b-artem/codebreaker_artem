@@ -35,27 +35,9 @@ RSpec.describe CodebreakerArtem::Game do
       end
     end
 
-    it 'prints welcome message' do
-      expect { game.send(:start) }.to output(/Welcome/).to_stdout
-    end
-  end
-
-  describe '#submit_guess' do
-    it 'accepts proper guess' do
-      allow($stdin).to receive(:gets).and_return("1234\n")
-      expect(game.send(:submit_guess)).to eq '1234'
-    end
-    it "doesn't accept too long guess" do
-      allow($stdin).to receive(:gets).and_return("12345\n")
-      expect(game.send(:submit_guess)).to be false
-    end
-    it "doesn't accept too short guess" do
-      allow($stdin).to receive(:gets).and_return("123\n")
-      expect(game.send(:submit_guess)).to be false
-    end
-    it "doesn't accept not matching guess" do
-      allow($stdin).to receive(:gets).and_return("1237\n")
-      expect(game.send(:submit_guess)).to be false
+    it 'calls GameUtils.welcome_msg' do
+      expect(game).to receive(:welcome_msg)
+      game.send(:start)
     end
   end
 
@@ -94,93 +76,49 @@ RSpec.describe CodebreakerArtem::Game do
   end
 
   describe '#win' do
-    it 'prints congrats message' do
+    it 'calls GameUtils.win_msg' do
+      expect(game).to receive(:win_msg)
       allow(game).to receive(:finish_game).and_return(nil)
-      expect { game.send(:win) }.to output(/Congratulations!/i).to_stdout
+      game.send(:win)
     end
-    it 'prints secret code' do
-      allow(game).to receive(:save_score).and_return(nil)
-      allow(game).to receive(:play_again).and_return(nil)
-      game.instance_variable_set(:@secret_code, 5555)
-      expect { game.send(:win) }.to output(/5555/).to_stdout
-    end
-    it 'proposes to play again' do
-      allow(game).to receive(:save_score).and_return(nil)
-      allow($stdin).to receive(:gets).and_return('y')
-      expect { game.send(:win) }.to output(/play.+more.+time?/i).to_stdout
+    it 'calls #finish_game' do
+      expect(game).to receive(:finish_game)
+      allow(game).to receive(:finish_game).and_return(nil)
+      game.send(:win)
     end
   end
 
   describe '#lose' do
-    it 'prints lost msg' do
+    it 'calls GameUtils.lose_msg' do
+      expect(game).to receive(:lose_msg)
       allow(game).to receive(:finish_game).and_return(nil)
-      expect { game.send(:lose) }.to output(/lost.+game/i).to_stdout
+      game.send(:lose)
     end
-    it 'reveals secret code' do
+    it 'calls #finish_game' do
+      expect(game).to receive(:finish_game)
+      allow(game).to receive(:finish_game).and_return(nil)
+      game.send(:lose)
+    end
+  end
+
+  describe '#finish_game' do
+    it 'calls GameUtils.reveal_code' do
+      expect(game).to receive(:reveal_code)
       allow(game).to receive(:save_score).and_return(nil)
       allow(game).to receive(:play_again).and_return(nil)
-      game.instance_variable_set(:@secret_code, 5555)
-      expect { game.send(:lose) }.to output(/5555/i).to_stdout
+      game.send(:finish_game)
     end
-    it 'proposes to play again' do
+    it 'calls GameUtils.save_score' do
+      expect(game).to receive(:save_score)
       allow(game).to receive(:save_score).and_return(nil)
-      allow($stdin).to receive(:gets).and_return('y')
-      expect { game.send(:lose) }.to output(/play.+more.+time?/i).to_stdout
+      allow(game).to receive(:play_again).and_return(nil)
+      game.send(:finish_game)
     end
-  end
-
-  describe '#yes?' do
-    context 'when correct input' do
-      it "returns false if 'n'" do
-        allow($stdin).to receive(:gets).and_return('n')
-        expect(game.send(:yes?)).to be false
-      end
-      it "returns true if 'y" do
-        allow($stdin).to receive(:gets).and_return('y')
-        expect(game.send(:yes?)).to be true
-      end
-    end
-
-    context 'when incorrect input' do
-      it "prints prompt to enter 'y' or 'n'" do
-        allow($stdin).to receive(:gets).and_return('r', 'n')
-        expect { game.send(:yes?) }.to output(/enter.+y.+or.+n/i).to_stdout
-      end
-    end
-  end
-
-  describe '#save_score' do
-    it 'proposes to save score' do
-      allow($stdin).to receive(:gets).and_return('y')
-      expect { game.send(:save_score) }.to output(/Do.+want.+save.+score/i).to_stdout
-    end
-    it 'saves score to file' do
-      allow($stdin).to receive(:gets).and_return('y')
-      game.instance_variable_set(:@score, 777)
-      game.send(:save_score)
-      file = File.open('./score/score.txt')
-      expect(file.readlines[-2]).to eq "Score: 777\n"
-    end
-    it 'saves name to file' do
-      allow(game).to receive(:yes?).and_return(true)
-      allow($stdin).to receive(:gets).and_return('Elon Musk')
-      game.send(:save_score)
-      file = File.open('./score/score.txt')
-      expect(file.readlines[-4]).to eq "Name: Elon Musk\n"
-    end
-  end
-
-  describe '#take_hint' do
-    it 'reveals one of the numbers in secret code' do
-      secret_code = game.instance_variable_set(:@secret_code, '1223')
-      number = game.send(:take_hint, 'hint')
-      expect(secret_code.include?(number.to_s)).to be true
-    end
-    it 'reveals number with minimum guesses' do
-      game.instance_variable_set(:@secret_code, '1234')
-      game.instance_variable_set(:@numbers_guess_count, [1, 0, 3, 2])
-      number = game.send(:take_hint, 'hint')
-      expect(number).to eq '2'
+    it 'calls GameUtils.play_again' do
+      expect(game).to receive(:play_again)
+      allow(game).to receive(:save_score).and_return(nil)
+      allow(game).to receive(:play_again).and_return(nil)
+      game.send(:finish_game)
     end
   end
 end

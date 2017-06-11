@@ -5,6 +5,8 @@ module CodebreakerArtem
     include GameUtils
     MAX_GUESS_NUMBER = 10
 
+    attr_reader :secret_code
+
     def initialize
       initial_values_set
     end
@@ -12,7 +14,7 @@ module CodebreakerArtem
     def play
       start
       loop do
-        guess_input
+        guess_prompt
         mark_guess(submit_guess)
         return lose if @guess_count >= MAX_GUESS_NUMBER
       end
