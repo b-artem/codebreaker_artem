@@ -75,50 +75,53 @@ RSpec.describe CodebreakerArtem::Game do
     end
   end
 
-  describe '#win' do
-    it 'calls GameUtils.win_msg' do
-      expect(game).to receive(:win_msg)
+  context 'when game is finished' do
+    before do
       allow(game).to receive(:finish_game).and_return(nil)
-      game.send(:win)
     end
-    it 'calls #finish_game' do
-      expect(game).to receive(:finish_game)
-      allow(game).to receive(:finish_game).and_return(nil)
-      game.send(:win)
-    end
-  end
 
-  describe '#lose' do
-    it 'calls GameUtils.lose_msg' do
-      expect(game).to receive(:lose_msg)
-      allow(game).to receive(:finish_game).and_return(nil)
-      game.send(:lose)
+    describe '#win' do
+      after do
+        game.send(:win)
+      end
+      it 'calls GameUtils.win_msg' do
+        expect(game).to receive(:win_msg)
+      end
+      it 'calls #finish_game' do
+        expect(game).to receive(:finish_game)
+      end
     end
-    it 'calls #finish_game' do
-      expect(game).to receive(:finish_game)
-      allow(game).to receive(:finish_game).and_return(nil)
-      game.send(:lose)
-    end
-  end
 
-  describe '#finish_game' do
-    it 'calls GameUtils.reveal_code' do
-      expect(game).to receive(:reveal_code)
-      allow(game).to receive(:save_score).and_return(nil)
-      allow(game).to receive(:play_again).and_return(nil)
-      game.send(:finish_game)
+    describe '#lose' do
+      after do
+        game.send(:lose)
+      end
+      it 'calls GameUtils.lose_msg' do
+        expect(game).to receive(:lose_msg)
+      end
+      it 'calls #finish_game' do
+        expect(game).to receive(:finish_game)
+      end
     end
-    it 'calls GameUtils.save_score' do
-      expect(game).to receive(:save_score)
-      allow(game).to receive(:save_score).and_return(nil)
-      allow(game).to receive(:play_again).and_return(nil)
-      game.send(:finish_game)
-    end
-    it 'calls GameUtils.play_again' do
-      expect(game).to receive(:play_again)
-      allow(game).to receive(:save_score).and_return(nil)
-      allow(game).to receive(:play_again).and_return(nil)
-      game.send(:finish_game)
+
+    describe '#finish_game' do
+      before do
+        allow(game).to receive(:finish_game).and_call_original
+        allow(game).to receive(:save_score).and_return(nil)
+        allow(game).to receive(:play_again).and_return(nil)
+      end
+      after do
+        game.send(:finish_game)
+      end
+      it 'calls GameUtils.reveal_code' do
+        expect(game).to receive(:reveal_code)
+      end
+      it 'calls GameUtils.save_score' do
+        expect(game).to receive(:save_score)
+      end
+      it 'calls GameUtils.play_again' do
+        expect(game).to receive(:play_again)
+      end
     end
   end
 end
