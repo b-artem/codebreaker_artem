@@ -1,32 +1,39 @@
-require_relative 'game_utils'
-
 module CodebreakerArtem
   class Game
-    include GameUtils
     MAX_GUESS_NUMBER = 10
 
-    attr_reader :secret_code
+    attr_reader :guess_count
 
     def initialize
       initial_values_set
     end
 
-    def play
-      start
-      loop do
-        guess_prompt
-        mark_guess(submit_guess)
-        return lose if @guess_count >= MAX_GUESS_NUMBER
-      end
-    end
-
-    private
-
     def start
       initial_values_set
       generate_secret_code
-      welcome_msg
     end
+
+    def mark_guess(guess)
+      return false unless guess
+      # Need some validation?
+      @guess_count += 1
+      counts = plus_minus_count(guess)
+      # Do I really need to set score each round?
+      score_set(counts[0], counts[1])
+      puts mark = '' << ('+' * counts[0]) << ('-' * counts[1])
+      return win if mark == '++++'
+      mark
+    end
+
+    def hint
+      return unless @hint_available # Check if hint is available
+      @hint_available = false
+      position = @numbers_guess_count.index(@numbers_guess_count.min)
+      secret_number = @secret_code[position]
+      [secret_number, position]
+    end
+
+    private
 
     def initial_values_set
       @guess_count = 0
@@ -40,14 +47,7 @@ module CodebreakerArtem
       4.times { @secret_code << rand(1..6).to_s }
     end
 
-    def mark_guess(guess)
-      return false unless guess
-      counts = plus_minus_count(guess)
-      score_set(counts[0], counts[1])
-      puts mark = '' << ('+' * counts[0]) << ('-' * counts[1])
-      return win if mark == '++++'
-      mark
-    end
+
 
     def plus_minus_count(guess)
       plus_count = 0
