@@ -11,7 +11,7 @@ module CodebreakerArtem
 
       loop do
         CLI.guess_prompt(game.guess_count)
-        case CLI.submit_guess
+        case input = CLI.submit_guess
         when nil then next
         when :hint
           CLI.show_hint(*game.hint)

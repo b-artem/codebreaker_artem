@@ -19,20 +19,18 @@ module CodebreakerArtem
       def submit_guess
         guess = $stdin.gets.chomp
         exit?(guess)
-        return :hint if hint?(guess)
+        return :hint if guess =~ /^hint$/i
         return wrong_code_pattern unless guess =~ /^[1-6]{4}$/
         guess
       end
 
-      def hint?(input = nil)
-        return false unless input =~ /^hint$/i
-        return false unless hint_available?
-        puts "HINT: Number #{secret_number} is in position #{position + 1}"
-      end
-
       def show_hint(number = nil, position = nil)
         return one_hint_only unless number && position
-        puts "HINT: Number #{secret_number} is in position #{position + 1}"
+        puts "HINT: Number #{number} is in position #{position + 1}"
+      end
+
+      def one_hint_only
+        puts 'You have only one hint'
       end
 
       def wrong_code_pattern
@@ -78,9 +76,7 @@ module CodebreakerArtem
 
 
 
-  def one_hint_only
-    puts 'You have only one hint'
-  end
+
 
   def play_again
     exit unless yes? { 'Would you like to play one more time? (y/n): ' }
