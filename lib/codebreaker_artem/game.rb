@@ -2,7 +2,7 @@ module CodebreakerArtem
   class Game
     MAX_GUESS_NUMBER = 10
 
-    attr_reader :guess_count
+    attr_reader :secret_code, :guess_count
 
     def initialize
       initial_values_set
@@ -20,13 +20,11 @@ module CodebreakerArtem
       counts = plus_minus_count(guess)
       # Do I really need to set score each round?
       score_set(counts[0], counts[1])
-      puts mark = '' << ('+' * counts[0]) << ('-' * counts[1])
-      return win if mark == '++++'
-      mark
+      '' << ('+' * counts[0]) << ('-' * counts[1])
     end
 
     def hint
-      return unless @hint_available # Check if hint is available
+      return unless hint_available? # Check if hint is available
       @hint_available = false
       position = @numbers_guess_count.index(@numbers_guess_count.min)
       secret_number = @secret_code[position]
@@ -46,8 +44,6 @@ module CodebreakerArtem
       @secret_code = ''
       4.times { @secret_code << rand(1..6).to_s }
     end
-
-
 
     def plus_minus_count(guess)
       plus_count = 0
@@ -69,24 +65,7 @@ module CodebreakerArtem
     end
 
     def hint_available?
-      return one_hint_only unless @hint_available
-      true
-    end
-
-    def win
-      win_msg
-      finish_game
-    end
-
-    def lose
-      lose_msg
-      finish_game
-    end
-
-    def finish_game
-      reveal_code
-      save_score
-      play_again
+      @hint_available
     end
   end
 end

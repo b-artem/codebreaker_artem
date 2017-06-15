@@ -1,7 +1,6 @@
 module CodebreakerArtem
   class CLI
     class << self
-
       def welcome_msg(max_guess_number)
         puts %(
           Welcome to the Codebreaker Game!
@@ -13,7 +12,7 @@ module CodebreakerArtem
       end
 
       def guess_prompt(guess_count)
-        print "Please enter your guess no. #{guess_count}: "
+        print "Please enter your guess no. #{guess_count + 1}: "
       end
 
       def submit_guess
@@ -29,6 +28,39 @@ module CodebreakerArtem
         puts "HINT: Number #{number} is in position #{position + 1}"
       end
 
+      def show_mark(mark)
+        puts mark
+      end
+
+      def win(code)
+        win_msg
+        finish_game(code)
+      end
+
+      def lose(code, max_guess_number)
+        lose_msg(max_guess_number)
+        finish_game(code)
+      end
+
+      def win_msg
+        puts "\nCONGRATULATIONS! You've won the Codebreaker game!"
+      end
+
+      def lose_msg(max_guess_number)
+        puts "You've used all your attempts (#{max_guess_number})" \
+              " and LOST THE GAME\n"
+      end
+
+      def finish_game(code)
+        reveal_code(code)
+        save_score
+        play_again
+      end
+
+      def reveal_code(code)
+        puts "The secret code was #{code}\n"
+      end
+
       def one_hint_only
         puts 'You have only one hint'
       end
@@ -41,15 +73,8 @@ module CodebreakerArtem
         exit if input =~ /^exit$/i
       end
 
-
-
-
-
     end
   end
-
-
-
 
 
   def save_score
@@ -74,16 +99,10 @@ module CodebreakerArtem
     puts "Your data was added to a file #{file.path}"
   end
 
-
-
-
-
   def play_again
     exit unless yes? { 'Would you like to play one more time? (y/n): ' }
     start
   end
-
-
 
   def yes?
     print yield if block_given?
@@ -96,19 +115,4 @@ module CodebreakerArtem
     end
   end
 
-
-
-
-  def win_msg
-    puts "\nCONGRATULATIONS! You've won the Codebreaker game!"
-  end
-
-  def lose_msg
-    puts "You've used all your attempts (#{Game::MAX_GUESS_NUMBER})" \
-          " and LOST THE GAME\n"
-  end
-
-  def reveal_code
-    puts "The secret code was #{@secret_code}\n"
-  end
 end

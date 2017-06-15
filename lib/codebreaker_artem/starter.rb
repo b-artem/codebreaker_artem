@@ -17,11 +17,12 @@ module CodebreakerArtem
           CLI.show_hint(*game.hint)
           next
         else
-          mark_guess(input)
+          mark = game.mark_guess(input)
+          return CLI.win(input) if mark == '++++'
+          CLI.show_mark(mark)
         end
-        return lose if @guess_count >= MAX_GUESS_NUMBER
+        return CLI.lose(game.secret_code, CodebreakerArtem::Game::MAX_GUESS_NUMBER) if game.guess_count >= CodebreakerArtem::Game::MAX_GUESS_NUMBER
       end
-
     end
   end
 end
