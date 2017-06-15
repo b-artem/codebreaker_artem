@@ -3,28 +3,32 @@ require_relative 'cli'
 
 module CodebreakerArtem
   class Starter
-    def self.play
+    MAX = CodebreakerArtem::Game::MAX_GUESS_NUMBER
+
+    def self.start
       game = CodebreakerArtem::Game.new
       game.start
-      # Can I use game::MAX_Guess_MNUMBER?
-      CLI.welcome_msg(CodebreakerArtem::Game::MAX_GUESS_NUMBER)
+      CLI.welcome_msg(MAX)
+      play(game)
+      start if CLI.play_again
+    end
 
+    def self.play(game)
       loop do
         CLI.guess_prompt(game.guess_count)
         case input = CLI.submit_guess
         when nil then next
-        when :hint
-          CLI.show_hint(*game.hint)
-          next
+        when :hint then CLI.show_hint(*game.hint)
         else
           mark = game.mark_guess(input)
-          return CLI.win(input) if mark == '++++'
+          return CLI.win(input, game.score) if mark == '++++'
           CLI.show_mark(mark)
         end
-        return CLI.lose(game.secret_code, CodebreakerArtem::Game::MAX_GUESS_NUMBER) if game.guess_count >= CodebreakerArtem::Game::MAX_GUESS_NUMBER
+        max = CodebreakerArtem::Game::MAX_GUESS_NUMBER
+        return CLI.lose(game.secret_code, game.score, MAX) if game.guess_count >= MAX
       end
     end
   end
 end
 
-CodebreakerArtem::Starter.play
+CodebreakerArtem::Starter.start

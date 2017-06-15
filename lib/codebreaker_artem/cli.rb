@@ -32,18 +32,18 @@ module CodebreakerArtem
         puts mark
       end
 
-      def win(code)
+      def win(code, score)
         win_msg
-        finish_game(code)
+        finish_game(code, score)
       end
 
-      def lose(code, max_guess_number)
+      def lose(code, score, max_guess_number)
         lose_msg(max_guess_number)
-        finish_game(code)
+        finish_game(code, score)
       end
 
       def win_msg
-        puts "\nCONGRATULATIONS! You've won the Codebreaker game!"
+        puts "\nCONGRATULATIONS! You've won the Codebreaker game!\n"
       end
 
       def lose_msg(max_guess_number)
@@ -51,10 +51,9 @@ module CodebreakerArtem
               " and LOST THE GAME\n"
       end
 
-      def finish_game(code)
+      def finish_game(code, score)
         reveal_code(code)
-        save_score
-        play_again
+        save_score(score)
       end
 
       def reveal_code(code)
@@ -73,46 +72,43 @@ module CodebreakerArtem
         exit if input =~ /^exit$/i
       end
 
+      def save_score(score)
+        return false unless yes? { 'Do you want to save your score? [y/n]: ' }
+        begin
+          Dir.mkdir('./score') unless File.exist?('./score')
+          file = File.new('./score/score.txt', 'a')
+        rescue
+          puts "Can't create file './score/score.txt'"
+          return
+        end
+        write_score_to_file(file, score)
+        file.close
+      end
+
+      def write_score_to_file(file, score)
+        print 'Please enter your name: '
+        name = $stdin.gets.chomp
+        file << "Name: #{name}\n"
+        file << "Time: #{Time.now}\n"
+        file << "Score: #{score}\n\n"
+        puts "Your data was added to a file #{file.path}"
+      end
+
+      def play_again
+        exit unless yes? { 'Would you like to play one more time? [y/n]: ' }
+        true
+      end
+
+      def yes?
+        print yield if block_given?
+        loop do
+          answer = $stdin.gets.chomp
+          exit?(answer)
+          return false if answer =~ /^n/i
+          return true if answer =~ /^y/i
+          puts "Please enter 'y' or 'n': "
+        end
+      end
     end
   end
-
-
-  def save_score
-    return false unless yes? { 'Do you want to save your score? (y/n): ' }
-    begin
-      Dir.mkdir('./score') unless File.exist?('./score')
-      file = File.new('./score/score.txt', 'a')
-    rescue
-      puts "Can't create file './score/score.txt'"
-      return
-    end
-    write_score_to_file file
-    file.close
-  end
-
-  def write_score_to_file(file)
-    print 'Please enter your name: '
-    name = $stdin.gets.chomp
-    file << "Name: #{name}\n"
-    file << "Time: #{Time.now}\n"
-    file << "Score: #{@score}\n\n"
-    puts "Your data was added to a file #{file.path}"
-  end
-
-  def play_again
-    exit unless yes? { 'Would you like to play one more time? (y/n): ' }
-    start
-  end
-
-  def yes?
-    print yield if block_given?
-    loop do
-      answer = $stdin.gets.chomp
-      exit?(answer)
-      return false if answer =~ /^n/i
-      return true if answer =~ /^y/i
-      puts "Please enter 'y' or 'n': "
-    end
-  end
-
 end

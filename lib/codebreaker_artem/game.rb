@@ -2,11 +2,11 @@ module CodebreakerArtem
   class Game
     MAX_GUESS_NUMBER = 10
 
-    attr_reader :secret_code, :guess_count
+    attr_reader :secret_code, :guess_count, :score
 
-    def initialize
-      initial_values_set
-    end
+    # def initialize
+    #   initial_values_set
+    # end
 
     def start
       initial_values_set
@@ -14,11 +14,10 @@ module CodebreakerArtem
     end
 
     def mark_guess(guess)
-      return false unless guess
       # Need some validation?
+      return false unless guess
       @guess_count += 1
       counts = plus_minus_count(guess)
-      # Do I really need to set score each round?
       score_set(counts[0], counts[1])
       '' << ('+' * counts[0]) << ('-' * counts[1])
     end
@@ -61,7 +60,7 @@ module CodebreakerArtem
 
     def score_set(plus_count, minus_count)
       @score = (plus_count * 3) + (minus_count * 1) +
-               (MAX_GUESS_NUMBER - @guess_count + 1)
+               (MAX_GUESS_NUMBER - @guess_count)
     end
 
     def hint_available?
