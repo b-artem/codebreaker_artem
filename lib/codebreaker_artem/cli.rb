@@ -43,12 +43,11 @@ module CodebreakerArtem
       end
 
       def win_msg
-        puts "\nCONGRATULATIONS! You've won the Codebreaker game!\n"
+        puts "\nCONGRATULATIONS! YOU'VE WON the Codebreaker game!\n"
       end
 
       def lose_msg(max_guess_number)
-        puts "You've used all your attempts (#{max_guess_number})" \
-              " and LOST THE GAME\n"
+        puts "GAME OVER. You've used all #{max_guess_number} attempts\n"
       end
 
       def finish_game(code, score)
@@ -61,11 +60,11 @@ module CodebreakerArtem
       end
 
       def one_hint_only
-        puts 'You have only one hint'
+        puts 'You have only one hint!'
       end
 
       def wrong_code_pattern
-        puts 'Code must contain 4 numbers from 1 to 6, please try again'
+        puts 'Code must contain 4 numbers from 1 to 6. Please try again'
       end
 
       def exit?(input)
@@ -91,7 +90,7 @@ module CodebreakerArtem
         file << "Name: #{name}\n"
         file << "Time: #{Time.now}\n"
         file << "Score: #{score}\n\n"
-        puts "Your data was added to a file #{file.path}"
+        puts "Your score was added to a file #{file.path}"
       end
 
       def play_again

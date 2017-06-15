@@ -21,8 +21,8 @@ module CodebreakerArtem
         when :hint then CLI.show_hint(*game.hint)
         else
           mark = game.mark_guess(input)
-          return CLI.win(input, game.score) if mark == '++++'
           CLI.show_mark(mark)
+          return CLI.win(input, game.score) if mark == '++++'
         end
         return CLI.lose(game.secret_code, game.score, MAX) if game.guess_count >= MAX
       end

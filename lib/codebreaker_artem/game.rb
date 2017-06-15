@@ -23,7 +23,7 @@ module CodebreakerArtem
     end
 
     def hint
-      return unless hint_available? # Check if hint is available
+      return unless hint_available?
       @hint_available = false
       position = @numbers_guess_count.index(@numbers_guess_count.min)
       secret_number = @secret_code[position]
