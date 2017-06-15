@@ -24,7 +24,6 @@ module CodebreakerArtem
           return CLI.win(input, game.score) if mark == '++++'
           CLI.show_mark(mark)
         end
-        max = CodebreakerArtem::Game::MAX_GUESS_NUMBER
         return CLI.lose(game.secret_code, game.score, MAX) if game.guess_count >= MAX
       end
     end
