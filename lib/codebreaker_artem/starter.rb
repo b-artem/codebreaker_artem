@@ -30,4 +30,4 @@ module CodebreakerArtem
   end
 end
 
-CodebreakerArtem::Starter.start
+# CodebreakerArtem::Starter.start

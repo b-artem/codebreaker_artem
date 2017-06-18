@@ -31,14 +31,14 @@ RSpec.describe CodebreakerArtem::Game do
         expect(game.instance_variable_get(:@secret_code).length).to eq 4
       end
       it 'saves secret code with numbers from 1 to 6' do
-        expect(game.instance_variable_get(:@secret_code)).to match(/[1-6]{4}/)
+        expect(game.instance_variable_get(:@secret_code)).to match(/^[1-6]{4}$/)
       end
     end
 
-    it 'calls GameUtils.welcome_msg' do
-      expect(game).to receive(:welcome_msg)
-      game.send(:start)
-    end
+    # it 'calls GameUtils.welcome_msg' do
+    #   expect(game).to receive(:welcome_msg)
+    #   game.send(:start)
+    # end
   end
 
   describe '#mark_guess' do
@@ -48,7 +48,7 @@ RSpec.describe CodebreakerArtem::Game do
 
     context 'when secret_code is 1223' do
       it "marks 4556 as ''" do
-        expect(game.send(:mark_guess, '4556')).to eq ''
+        expect(game.mark_guess('4556')).to eq ''
       end
       it 'marks 1556 as +' do
         expect(game.send(:mark_guess, '1556')).to eq '+'
@@ -59,69 +59,85 @@ RSpec.describe CodebreakerArtem::Game do
       it 'marks 1356 as +-' do
         expect(game.send(:mark_guess, '1356')).to eq '+-'
       end
-      it 'marks 1156 as +-' do
-        expect(game.send(:mark_guess, '1156')).to eq '+-'
+      it 'marks 1156 as +' do
+        expect(game.send(:mark_guess, '1156')).to eq '+'
       end
-      it 'marks 1335 as +--' do
-        expect(game.send(:mark_guess, '1335')).to eq '+--'
+      it 'marks 1335 as +-' do
+        expect(game.send(:mark_guess, '1335')).to eq '+-'
       end
-      it 'marks 3112 as ----' do
-        expect(game.send(:mark_guess, '3112')).to eq '----'
+      it 'marks 3112 as ---' do
+        expect(game.send(:mark_guess, '3112')).to eq '---'
       end
-      it '1223 leads to #win' do
-        allow(game).to receive(:win).and_return('win')
-        expect(game.send(:mark_guess, '1223')).to eq 'win'
-      end
+      # it '1223 leads to #win' do
+      #   allow(game).to receive(:win).and_return('win')
+      #   expect(game.send(:mark_guess, '1223')).to eq 'win'
+      # end
     end
   end
 
-  context 'when game is finished' do
+  describe '#hint' do
     before do
-      allow(game).to receive(:finish_game).and_return(nil)
+      game.instance_variable_set(:@secret_code, '1234')
     end
+    let(:number) { game.hint[0] }
 
-    describe '#win' do
-      after do
-        game.send(:win)
-      end
-      it 'calls GameUtils.win_msg' do
-        expect(game).to receive(:win_msg)
-      end
-      it 'calls #finish_game' do
-        expect(game).to receive(:finish_game)
-      end
+    it 'reveals one of the numbers in secret code' do
+      secret_code = '1234'
+      expect(secret_code.include?(number.to_s)).to be true
     end
-
-    describe '#lose' do
-      after do
-        game.send(:lose)
-      end
-      it 'calls GameUtils.lose_msg' do
-        expect(game).to receive(:lose_msg)
-      end
-      it 'calls #finish_game' do
-        expect(game).to receive(:finish_game)
-      end
-    end
-
-    describe '#finish_game' do
-      before do
-        allow(game).to receive(:finish_game).and_call_original
-        allow(game).to receive(:save_score).and_return(nil)
-        allow(game).to receive(:play_again).and_return(nil)
-      end
-      after do
-        game.send(:finish_game)
-      end
-      it 'calls GameUtils.reveal_code' do
-        expect(game).to receive(:reveal_code)
-      end
-      it 'calls GameUtils.save_score' do
-        expect(game).to receive(:save_score)
-      end
-      it 'calls GameUtils.play_again' do
-        expect(game).to receive(:play_again)
-      end
+    it 'reveals number with minimum guesses' do
+      game.instance_variable_set(:@numbers_guess_count, [1, 0, 3, 2])
+      expect(number).to eq '2'
     end
   end
+
+  # context 'when game is finished' do
+  #   before do
+  #     allow(game).to receive(:finish_game).and_return(nil)
+  #   end
+
+  #   describe '#win' do
+  #     after do
+  #       game.send(:win)
+  #     end
+  #     it 'calls GameUtils.win_msg' do
+  #       expect(game).to receive(:win_msg)
+  #     end
+  #     it 'calls #finish_game' do
+  #       expect(game).to receive(:finish_game)
+  #     end
+  #   end
+
+  #   describe '#lose' do
+  #     after do
+  #       game.send(:lose)
+  #     end
+  #     it 'calls GameUtils.lose_msg' do
+  #       expect(game).to receive(:lose_msg)
+  #     end
+  #     it 'calls #finish_game' do
+  #       expect(game).to receive(:finish_game)
+  #     end
+  #   end
+
+  #   describe '#finish_game' do
+  #     before do
+  #       allow(game).to receive(:finish_game).and_call_original
+  #       allow(game).to receive(:save_score).and_return(nil)
+  #       allow(game).to receive(:play_again).and_return(nil)
+  #     end
+  #     after do
+  #       game.send(:finish_game)
+  #     end
+  #     it 'calls GameUtils.reveal_code' do
+  #       expect(game).to receive(:reveal_code)
+  #     end
+  #     it 'calls GameUtils.save_score' do
+  #       expect(game).to receive(:save_score)
+  #     end
+  #     it 'calls GameUtils.play_again' do
+  #       expect(game).to receive(:play_again)
+  #     end
+  #   end
+  # end
 end

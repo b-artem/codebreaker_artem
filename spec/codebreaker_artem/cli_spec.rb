@@ -114,7 +114,7 @@ RSpec.describe CodebreakerArtem::CLI do
     end
   end
 
-  describe '#take_hint' do
+  describe '#show_hint' do
     before do
       game.instance_variable_set(:@secret_code, '1234')
     end

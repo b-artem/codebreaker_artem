@@ -4,9 +4,9 @@ module CodebreakerArtem
 
     attr_reader :secret_code, :guess_count, :score
 
-    # def initialize
-    #   initial_values_set
-    # end
+    def initialize
+      initial_values_set
+    end
 
     def start
       initial_values_set
