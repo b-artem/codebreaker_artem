@@ -1,3 +1,5 @@
+require_relative 'validator'
+
 module CodebreakerArtem
   class Game
     MAX_GUESS_NUMBER = 10
@@ -14,8 +16,7 @@ module CodebreakerArtem
     end
 
     def mark_guess(guess)
-      # Need some validation?
-      return false unless guess
+      return false unless Validator.code_valid? guess
       @guess_count += 1
       counts = plus_minus_count(guess)
       score_set(counts[0], counts[1])
@@ -25,7 +26,7 @@ module CodebreakerArtem
     def hint
       return unless hint_available?
       @hint_available = false
-      position = @numbers_guess_count.index(@numbers_guess_count.min)
+      position = rand(0..3)
       secret_number = @secret_code[position]
       [secret_number, position]
     end
@@ -35,7 +36,6 @@ module CodebreakerArtem
     def initial_values_set
       @guess_count = 0
       @score = 0
-      @numbers_guess_count = [0, 0, 0, 0]
       @hint_available = true
     end
 
@@ -45,16 +45,14 @@ module CodebreakerArtem
     end
 
     def plus_minus_count(guess)
-      plus_count = 0
-      minus_count = 0
-      guess.each_char.with_index do |number, index|
-        if number == @secret_code[index]
-          plus_count += 1
-          @numbers_guess_count[index] += 1
-        elsif @secret_code.include? number
-          minus_count += 1
-        end
-      end
+      zipped = @secret_code.split('').zip(guess.split(''))
+      not_plus = zipped.delete_if { |item| item.uniq.count == 1 }
+      return [4, 0] if not_plus.empty?
+      plus_count = 4 - not_plus.count
+      code = not_plus.transpose[0]
+      guesses = not_plus.transpose[1]
+      guesses.each { |item| code.delete_at(code.index(item) || code.length) }
+      minus_count = 4 - plus_count - code.size
       [plus_count, minus_count]
     end
 

@@ -1,3 +1,5 @@
+require_relative 'validator'
+
 module CodebreakerArtem
   class CLI
     class << self
@@ -19,7 +21,7 @@ module CodebreakerArtem
         guess = $stdin.gets.chomp
         exit?(guess)
         return :hint if guess =~ /^hint$/i
-        return wrong_code_pattern unless guess =~ /^[1-6]{4}$/
+        return wrong_code_pattern unless Validator.code_valid?(guess)
         guess
       end
 
