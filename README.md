@@ -24,8 +24,7 @@ Or install it yourself as:
 ```ruby
 require 'codebreaker_artem'
 
-game = CodebreakerArtem::Game.new
-game.play
+CodebreakerArtem::Starter.start
 ```
 
 The code-maker, which will be played by the application, creates a secret code of four numbers between 1 and 6.

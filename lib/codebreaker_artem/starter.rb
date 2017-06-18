@@ -29,5 +29,3 @@ module CodebreakerArtem
     end
   end
 end
-
-# CodebreakerArtem::Starter.start
