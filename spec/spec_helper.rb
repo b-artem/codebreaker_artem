@@ -1,5 +1,8 @@
 require "bundler/setup"
-require "codebreaker_artem"
+require 'codebreaker_artem/game'
+require 'codebreaker_artem/cli'
+require 'codebreaker_artem/starter'
+require 'test_data/test_data'
 
 RSpec.configure do |config|
   original_stdout = $stdout
