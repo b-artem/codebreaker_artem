@@ -27,8 +27,7 @@ module CodebreakerArtem
       return unless hint_available?
       @hint_available = false
       position = rand(0..3)
-      secret_number = @secret_code[position]
-      [secret_number, position]
+      [@secret_code[position], position]
     end
 
     private
@@ -46,14 +45,17 @@ module CodebreakerArtem
 
     def plus_minus_count(guess)
       zipped = @secret_code.split('').zip(guess.split(''))
-      not_plus = zipped.delete_if { |item| item.uniq.count == 1 }
+      not_plus = zipped.delete_if { |item| item.uniq.one? }
       return [4, 0] if not_plus.empty?
       plus_count = 4 - not_plus.count
+      [plus_count, minus_count(not_plus)]
+    end
+
+    def minus_count(not_plus)
       code = not_plus.transpose[0]
-      guesses = not_plus.transpose[1]
-      guesses.each { |item| code.delete_at(code.index(item) || code.length) }
-      minus_count = 4 - plus_count - code.size
-      [plus_count, minus_count]
+      guess = not_plus.transpose[1]
+      guess.each { |item| code.delete_at(code.index(item) || code.length) }
+      not_plus.count - code.size
     end
 
     def score_set(plus_count, minus_count)

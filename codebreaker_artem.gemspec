@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = CodebreakerArtem::VERSION
   spec.licenses      = ['MIT']
   spec.authors       = ["b-artem"]
-  spec.email         = ["ba.artyom@gmail.com"]
+  spec.email         = ["artemb.dev@gmail.com"]
 
   spec.summary       = %q{Codebreaker game.}
   spec.description   = %q{Codebreaker is a logic game in which a code-breaker
@@ -16,6 +16,7 @@ Gem::Specification.new do |spec|
       which will be played by the application, creates a secret code of four
       numbers between 1 and 6.}
   spec.homepage      = "https://github.com/b-artem/codebreaker_artem"
+  spec.required_ruby_version = "1.9.3"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.

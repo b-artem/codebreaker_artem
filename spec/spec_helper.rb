@@ -7,7 +7,6 @@ require 'test_data/test_data'
 RSpec.configure do |config|
   original_stdout = $stdout
   config.before(:all) do
-    # Redirect stdout
     $stdout = File.open(File::NULL, "w")
   end
   config.after(:all) do
