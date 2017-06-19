@@ -16,7 +16,7 @@ Gem::Specification.new do |spec|
       which will be played by the application, creates a secret code of four
       numbers between 1 and 6.}
   spec.homepage      = "https://github.com/b-artem/codebreaker_artem"
-  spec.required_ruby_version = "1.9.3"
+  spec.required_ruby_version = ">=1.9.3"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
