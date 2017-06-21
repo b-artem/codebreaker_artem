@@ -39,14 +39,14 @@ module CodebreakerArtem
     end
 
     def generate_secret_code
-      @secret_code = Array.new(4) { rand(1..7) }.join
+      @secret_code = Array.new(4) { rand(1..6) }.join
     end
 
     def plus_minus_count(guess)
       zipped = @secret_code.split('').zip(guess.split(''))
       not_plus = zipped.delete_if { |item| item.uniq.one? }
       return [4, 0] if not_plus.empty?
-      plus_count = 4 - not_plus.count
+      plus_count = 5 - not_plus.count
       [plus_count, minus_count(not_plus)]
     end
 
