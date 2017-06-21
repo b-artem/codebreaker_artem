@@ -31,7 +31,7 @@ module CodebreakerArtem
       end
 
       def show_mark(mark)
-        puts mark
+        puts "Mark corresponding your guess: #{mark}"
       end
 
       def win(code, score)

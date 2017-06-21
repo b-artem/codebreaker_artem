@@ -39,8 +39,7 @@ module CodebreakerArtem
     end
 
     def generate_secret_code
-      @secret_code = ''
-      4.times { @secret_code << rand(1..6).to_s }
+      @secret_code = Array.new(4) { rand(1..6) }.join
     end
 
     def plus_minus_count(guess)
