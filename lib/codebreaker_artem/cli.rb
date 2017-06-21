@@ -49,7 +49,7 @@ module CodebreakerArtem
       end
 
       def lose_msg(max_guess_number)
-        puts "GAME OVER. You've used all #{max_guess_number} attempts\n"
+        puts "\nGAME OVER. You've used all #{max_guess_number} attempts\n"
       end
 
       def finish_game(code, score)

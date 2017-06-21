@@ -7,11 +7,12 @@ module CodebreakerArtem
     attr_reader :secret_code, :guess_count, :score
 
     def initialize
-      initial_values_set
+      @guess_count = 0
+      @score = 0
+      @hint_available = true
     end
 
     def start
-      initial_values_set
       generate_secret_code
     end
 
@@ -19,8 +20,8 @@ module CodebreakerArtem
       return false unless Validator.code_valid? guess
       @guess_count += 1
       counts = plus_minus_count(guess)
-      score_set(counts[0], counts[1])
-      '' << ('+' * counts[0]) << ('-' * counts[1])
+      score_set(counts[:pluses], counts[:minuses])
+      '' << ('+' * counts[:pluses]) << ('-' * counts[:minuses])
     end
 
     def hint
@@ -32,22 +33,16 @@ module CodebreakerArtem
 
     private
 
-    def initial_values_set
-      @guess_count = 0
-      @score = 0
-      @hint_available = true
-    end
-
     def generate_secret_code
       @secret_code = Array.new(4) { rand(1..6) }.join
     end
 
     def plus_minus_count(guess)
+      return { pluses: 4, minuses: 0 } if @secret_code == guess
       zipped = @secret_code.split('').zip(guess.split(''))
       not_plus = zipped.delete_if { |item| item.uniq.one? }
-      return [4, 0] if not_plus.empty?
-      plus_count = 5 - not_plus.count
-      [plus_count, minus_count(not_plus)]
+      plus_count = 4 - not_plus.count
+      { pluses: plus_count, minuses: minus_count(not_plus) }
     end
 
     def minus_count(not_plus)

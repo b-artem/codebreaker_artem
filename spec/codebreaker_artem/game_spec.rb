@@ -4,14 +4,14 @@ RSpec.describe CodebreakerArtem::Game do
   subject(:game) { CodebreakerArtem::Game.new }
 
   describe '#start' do
-    context 'when sets initial values' do
-      it 'sets @guess_count = 0' do
+    context 'when checking initial values' do
+      it '@guess_count = 0' do
         expect(game.instance_variable_get(:@guess_count)).to eq 0
       end
-      it 'sets @score = 0' do
+      it '@score = 0' do
         expect(game.instance_variable_get(:@score)).to eq 0
       end
-      it 'sets @hint_available = true' do
+      it '@hint_available = true' do
         expect(game.instance_variable_get(:@hint_available)).to eq true
       end
     end

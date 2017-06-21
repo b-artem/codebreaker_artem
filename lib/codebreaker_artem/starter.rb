@@ -3,7 +3,7 @@ require_relative 'cli'
 
 module CodebreakerArtem
   class Starter
-    MAX = CodebreakerArtem::Game::MAX_GUESS_NUMBER
+    MAX = Game::MAX_GUESS_NUMBER
 
     def self.start
       game = CodebreakerArtem::Game.new
@@ -22,7 +22,7 @@ module CodebreakerArtem
         else
           mark = game.mark_guess(input)
           CLI.show_mark(mark)
-          return CLI.win(input, game.score) if mark == '++++'
+          return CLI.win(input, game.score) if Validator.win_mark?(mark)
         end
         return CLI.lose(game.secret_code, game.score, MAX) if game.guess_count >= MAX
       end
